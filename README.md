@@ -27,7 +27,7 @@ factor_vars <- c("rejection", "abmr", "tcmr", "g_score", "cg_score", "ptc_score"
 exp_design[,factor_vars] <- lapply(exp_design[,factor_vars], as.factor)
 ```
 
-**QC**
+**Quality Control**
 
 QC attributes: imaging and binding density
 ```

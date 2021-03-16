@@ -12,8 +12,10 @@ ns.counts <- ns.data$counts
 ns.att <- ns.data$attributes
 ```
 
-**Comparisons for differential expressoin analysis**
+**Set up comparisons for differential expression analysis**
 ```
+ref.df <- read.csv("Kidney-RefSet_FFPE-Run_NanoString_clean.csv", header=TRUE, check.names=FALSE, stringsAsFactors=FALSE)
+
 exp_design <- data.frame(ID=ref.df$ID,
                          rejection=ifelse(ref.df$Dx %in% c("Chronic Active ABMR", "Active ABMR", "Chronic active TCMR", "Acute TCMR"), 1, 0),
                          abmr=ifelse(ref.df$Dx %in% c("Chronic Active ABMR", "Active ABMR"), 1, 0),

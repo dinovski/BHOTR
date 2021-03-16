@@ -77,12 +77,12 @@ fdat <- AnnotatedDataFrame(data=ns.anno)
 eset <- newSeqExpressionSet(mat, phenoData=pdat, featureData=fdat)
 ```
 
-nSolver normalization
+**nSolver normalization**
 ```
 ns_norm <- NS_norm(eset, background_correction=FALSE, take_log=FALSE)
 ```
 
-RUV normalization [Bhattacharya et al. 2020](https://doi.org/10.1093/bib/bbaa163)
+**RUV normalization** [Bhattacharya et al. 2020](https://doi.org/10.1093/bib/bbaa163)
 ```
 ruv_norm <- RUV_norm(eset, k=1)
 ```
@@ -95,12 +95,12 @@ normalized counts
 assay(ruv_norm$vsd)
 ```
 
-RCR normalization
+**RCR normalization**
 ```
 RCR_norm(ns.counts)
 ```
 
-**RLE plots**
+**RLE plots**\
 raw counts
 ```
 raw_counts <- as.matrix(ns.counts[ns.counts$CodeClass=="Endogenous",-c(1:3)])
@@ -113,8 +113,7 @@ ruv.norm.endo <- assay(ruv_norm$vsd)[rownames(assay(ruv_norm$vsd)) %in% endo_gen
 plotRLE(ruv.norm.endo, is_logged=TRUE, main="RUV norm")
 ```
 
-**Differential Expression Analysis (negative binomial model)**
-
+**Differential Expression Analysis (negative binomial model)**\
 Input raw counts to DESeq2
 ```
 ruv_endo <- counts(ruv_norm$eset)[rownames(counts(ruv_norm$eset)) %in% endo_genes,]

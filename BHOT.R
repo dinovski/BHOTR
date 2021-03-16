@@ -306,7 +306,7 @@ hkQC <- function(raw_counts, group_labels) {
     ## caclulate CV for each HK gene
     #hk_cv = apply(hk_counts, 1, sd, na.rm=TRUE) / apply(hk_counts, 1, mean, na.rm=TRUE) * 100
     
-    ## if available, NB regression between biological conditions/outcomes of interest
+    ## if available, NB regression between hk_genes ~ biological conditions/outcomes of interest
     if (length(group_labels)>0) { 
         
         hk_pvals = data.frame(gene=rownames(hk_counts), pval=rep(NA, nrow(hk_counts)))
@@ -560,6 +560,43 @@ plotRLE <- function(counts, is_logged, main) {
 
 ## feature selection: 10-50 genes
 
+## Volcano plot
+plotVolcano <- function(df.fit, p_cutoff, plot_title) {
+    
+    df.fit$gene <- rownames(df.fit)
+    
+    df.fit$logP <- -log10(df.fit$pvalue)
+    df.fit$logPadj <- -log10(df.fit$padj)
+    
+    #df.fit <- plyr::mutate(df.fit, sig=ifelse(df.fit$padj < p_cutoff & abs(df.fit$log2FoldChange)>0.5, "sig", "not"))
+    df.fit <- plyr::mutate(df.fit, sig=ifelse(df.fit$padj < p_cutoff, "sig", "not"))
+    df.fit <- df.fit[order(df.fit$pvalue, decreasing=FALSE),]
+    
+    ## label top genes by pvalue or logFC
+    gp_volcano <- ggplot() + ylab("-log10(pval)") + xlab("log2FC") + ggtitle(plot_title) +
+        #geom_point(data=df.fit, aes( x=log2FoldChange, y=logP), colour="slategray", size=3, alpha=0.7) +
+        geom_point(data=df.fit, aes(x=log2FoldChange, y=logP, color=sig), shape=19, size=3, alpha=0.7) +
+        geom_text_repel(data=head(df.fit, 20), aes(x=log2FoldChange, y=logP, label=gene), colour="gray", size=3) +
+        scale_color_manual(values=c("dodgerblue", "salmon")) + 
+        geom_vline(xintercept=0, linetype="dashed", size=0.4) +
+        geom_vline(xintercept=1, linetype="dashed", size=0.2) + geom_vline(xintercept=-1, size=0.2, linetype="dashed") +
+        theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),
+              panel.background=element_blank(), axis.line=element_line(colour="black"),
+              panel.border=element_rect(colour="black", fill=NA, size=1),
+              plot.title = element_text(size=12, face = "bold"), legend.position="none",
+              axis.text=element_text(size=12, family="sans", colour="black"), 
+              axis.title.x=element_text(size=12, family="sans", colour="black"), 
+              axis.title.y=element_text(size=12, family="sans", colour="black"))
+    
+    df.fit[df.fit$gene %in% c("CCL4", "CXCL11", "CXCL10", "PLA1A", "GNLY", "ROBO4", "FGFBP2",
+                              "SH2D1B", "CD160", "DARC", "ROBO4", "CDH5", "CDH13", "SOST"),] #ABMR
+    
+    df.fit[df.fit$gene %in% c("ADAMDEC1", "ANKRD22", "CTLA4", "IFNG", "ICOS", "BTLA", 
+                              "CD96", "LAG3", "SIRPG", "LCP2", "DUSP2", "CD8A"),] #TCMR
+    
+    return(gp_volcano)
+    
+}
 
 ##------------------
 ## TODO: QC plots

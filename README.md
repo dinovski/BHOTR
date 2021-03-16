@@ -39,7 +39,7 @@ QC counts
 ```
 count.qc <- qcCounts(ns.counts)
 ```
-per sample endogenous gene stats
+QC per sample endogenous genes
 ```
 sampleStats(ns.counts)
 ```

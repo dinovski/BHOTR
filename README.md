@@ -1,8 +1,8 @@
 
 **Load functions**
-'''
+```
 source('BHOT.R')
-'''
+```
 
 **Load files (rccFiles is a vector of file paths)**
 ```

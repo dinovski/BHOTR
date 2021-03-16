@@ -47,10 +47,10 @@ sampleStats(ns.counts)
 **Select housekeeping genes for normalization**\
 Include group labels (optional) to perform NB regression between hk_genes ~ biological conditions/outcomes of interest
 ```
-group_labels <- ifelse(colnames(ns.counts[,!colnames(ns.counts) %in% c("CodeClass", "Name", "Accession")]) %in% exp_design[exp_design$abmr==1,"ID"], 1, 0)
-group_labels <- ifelse(colnames(ns.counts[,!colnames(ns.counts) %in% c("CodeClass", "Name", "Accession")]) %in% exp_design[exp_design$tcmr==1,"ID"], 1, 0)
+abmr_labels <- ifelse(colnames(ns.counts[,!colnames(ns.counts) %in% c("CodeClass", "Name", "Accession")]) %in% exp_design[exp_design$abmr==1,"ID"], 1, 0)
+tcmr_labels <- ifelse(colnames(ns.counts[,!colnames(ns.counts) %in% c("CodeClass", "Name", "Accession")]) %in% exp_design[exp_design$tcmr==1,"ID"], 1, 0)
 
-hk_qc <- hkQC(ns.counts, group_labels)
+hk_qc <- hkQC(ns.counts, abmr_labels)
 ```
 
 Remove unstable housekeeping genes

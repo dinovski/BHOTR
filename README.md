@@ -59,7 +59,7 @@ ns.counts <- ns.counts[!ns.counts$Name %in% hk_qc$hk_genes_remove,]
 rownames(ns.counts) <- ns.counts$Name
 ```
 
-**Normalization**
+**Normalization (nSolver, RUV, or RCR)**
 
 create expression set (count column names must match phenoData rows)
 ```

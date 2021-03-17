@@ -45,7 +45,7 @@ sampleStats(ns.counts)
 ```
 
 **Select housekeeping genes for normalization**\
-Include group labels (optional) to perform NB regression between hk_genes ~ biological conditions/outcomes of interest
+Include group labels (optional) to perform negative binomial regression between hk_genes ~ biological conditions/outcomes of interest
 ```
 abmr_labels <- ifelse(colnames(ns.counts[,!colnames(ns.counts) %in% c("CodeClass", "Name", "Accession")]) %in% exp_design[exp_design$abmr==1,"ID"], 1, 0)
 tcmr_labels <- ifelse(colnames(ns.counts[,!colnames(ns.counts) %in% c("CodeClass", "Name", "Accession")]) %in% exp_design[exp_design$tcmr==1,"ID"], 1, 0)
@@ -61,7 +61,7 @@ rownames(ns.counts) <- ns.counts$Name
 
 **Normalization (nSolver, RUV, or RCR)**
 
-create expression set (count column names must match phenoData rows)
+create expression set (count matrix column names must match phenoData rows)
 ```
 mat <- as.matrix(ns.counts[,-c(1:3)])
 

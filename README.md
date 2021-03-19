@@ -82,7 +82,8 @@ eset <- newSeqExpressionSet(mat, phenoData=pdat, featureData=fdat)
 ns_norm <- NS_norm(eset, background_correction=FALSE, take_log=FALSE)
 ```
 
-**RUV normalization** [Bhattacharya et al. 2020](https://doi.org/10.1093/bib/bbaa163)
+**RUV normalization** [Bhattacharya et al. 2020](https://doi.org/10.1093/bib/bbaa163)\
+Iterate over different values of k and visualize data (RLE/PCA)
 ```
 ruv_norm <- RUV_norm(eset, k=1)
 ```
@@ -113,15 +114,15 @@ ruv.norm.endo <- assay(ruv_norm$vsd)[rownames(assay(ruv_norm$vsd)) %in% endo_gen
 plotRLE(ruv.norm.endo, is_logged=TRUE, main="RUV norm")
 ```
 
-**Differential Expression Analysis (negative binomial model)**\
-Input raw counts to DESeq2
+**Differential Expression Analysis using Ruvseq approach: **\
+Raw counts are regressed using a negative binomial model (DESeq2) on known covariates of interest and unknown factors of unwanted variation (W)
 ```
-ruv_endo <- counts(ruv_norm$eset)[rownames(counts(ruv_norm$eset)) %in% endo_genes,]
+ruv.raw.endo <- counts(ruv_norm$eset)[rownames(counts(ruv_norm$eset)) %in% endo_genes,]
 ```
 
 ABMR v. all
 ```
-ruv.abmr <- DESeqDataSetFromMatrix(countData = ruv_endo, colData = pData(ruv_norm$eset), design = ~ W_1 + abmr)
+ruv.abmr <- DESeqDataSetFromMatrix(countData = ruv.raw.endo, colData = pData(ruv_norm$eset), design = ~ W_1 + abmr)
 ruv.abmr <- DESeq(ruv.abmr, test="Wald")
 ruv.abmr.sig <- data.frame(results(ruv.abmr))
 hist(ruv.abmr.sig$pvalue)
@@ -129,7 +130,7 @@ hist(ruv.abmr.sig$pvalue)
 
 TCMR v. all
 ```
-ruv.tcmr <- DESeqDataSetFromMatrix(countData = ruv_endo, colData = pData(ruv_norm$eset), design = ~ W_1 + tcmr)
+ruv.tcmr <- DESeqDataSetFromMatrix(countData = ruv.raw.endo, colData = pData(ruv_norm$eset), design = ~ W_1 + tcmr)
 ruv.tcmr <- DESeq(ruv.tcmr, test="Wald")
 ruv.tcmr.sig <- data.frame(results(ruv.tcmr))
 hist(ruv.tcmr.sig$pvalue)

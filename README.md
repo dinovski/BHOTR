@@ -114,7 +114,7 @@ ruv.norm.endo <- assay(ruv_norm$vsd)[rownames(assay(ruv_norm$vsd)) %in% endo_gen
 plotRLE(ruv.norm.endo, is_logged=TRUE, main="RUV norm")
 ```
 
-**Differential Expression Analysis using Ruvseq approach:**\
+**Differential Expression Analysis using RUVseq approach:**\
 Raw counts are regressed using a negative binomial model (DESeq2) on known covariates of interest and unknown factors of unwanted variation (W)
 ```
 ruv.raw.endo <- counts(ruv_norm$eset)[rownames(counts(ruv_norm$eset)) %in% endo_genes,]

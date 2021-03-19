@@ -542,7 +542,7 @@ plotRLE <- function(counts, is_logged, main) {
     endo_melt <- na.omit(endo_melt)
     
     ggplot(endo_melt, aes(x=reorder(Var2, value, median, order=TRUE), y=value, fill=Var2)) + 
-        ggtitle(main) +
+        ggtitle(main) + ylab("log2(counts/median)") +
         geom_hline(yintercept=0, linetype="dashed", color="firebrick") +
         geom_boxplot(outlier.size=1, outlier.shape=21, outlier.fill="whitesmoke") +
         theme(legend.position="none",
